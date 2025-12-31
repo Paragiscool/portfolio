@@ -1,0 +1,80 @@
+/* assets/style.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* Global Styles */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #0e1117;
+    color: #FAFAFA;
+}
+
+h1,
+h2,
+h3 {
+    letter-spacing: -0.5px;
+}
+
+p {
+    line-height: 1.6;
+    font-size: 1.05rem;
+    color: #Cdd6f4;
+}
+
+/* Hide Streamlit components */
+#MainMenu {
+    visibility: hidden;
+}
+
+footer {
+    visibility: hidden;
+}
+
+header {
+    visibility: hidden;
+}
+
+/* Custom Metrics Styling - Premium Dashboard Look */
+div[data-testid="metric-container"] {
+    background-color: #1e1e24;
+    /* Slightly darker */
+    border: 1px solid #2d2d3a;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2sease, box-shadow 0.2s ease;
+}
+
+/* Hover Effect for Cards */
+div[data-testid="metric-container"]:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 204, 150, 0.15);
+    /* Tech Green Glow */
+    border-color: #00CC96;
+}
+
+div[data-testid="metric-container"] label {
+    color: #A0A5B0;
+    font-weight: 500;
+}
+
+div[data-testid="metric-container"] div[data-testid="stMetricValue"] {
+    color: #FAFAFA;
+    font-weight: 700;
+}
+
+/* Profile Image Styling */
+img {
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Sidebar Lottie Container */
+.lottie-container {
+    margin-bottom: 20px;
+}
+
+/* Button Styling Override */
+.stButton button {
+    border-radius: 8px;
+    font-weight: 600;
+}

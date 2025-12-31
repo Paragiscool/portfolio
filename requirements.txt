@@ -1,0 +1,11 @@
+streamlit
+streamlit-lottie
+streamlit-folium
+folium
+pandas
+plotly
+streamlit-timeline
+numpy
+scikit-learn
+altair
+requests
