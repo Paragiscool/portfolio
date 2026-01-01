@@ -48,9 +48,27 @@ except Exception as e:
 # Status Badge
 st.markdown(
     """
-    <div style="background-color: rgba(0, 204, 150, 0.1); border: 1px solid #00CC96; border-radius: 5px; padding: 10px; text-align: center; margin-bottom: 25px;">
-        <h4 style="margin: 0; color: #00CC96;">🟢 Actively Looking for SDE/ML Internships (Summer 2025)</h4>
+    <div style="
+        background-color: rgba(0, 204, 150, 0.1); 
+        border: 1px solid #00CC96; 
+        border-radius: 50px; 
+        padding: 10px 25px; 
+        text-align: center; 
+        margin-bottom: 25px; 
+        box-shadow: 0 0 10px rgba(0, 204, 150, 0.3);
+        animation: pulse 2s infinite;
+    ">
+        <h4 style="margin: 0; color: #00CC96; font-size: 1.1rem;">
+            🟢 Actively Looking for SDE/ML Internships (Summer 2025)
+        </h4>
     </div>
+    <style>
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 204, 150, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 204, 150, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 204, 150, 0); }
+        }
+    </style>
     """, 
     unsafe_allow_html=True
 )
@@ -71,7 +89,7 @@ with col1:
         st.markdown('<div style="background-color:#333; height:250px; width:250px; border-radius:50%; display:flex; align-items:center; justify-content:center; border: 4px solid #00CC96;"><span>No Image</span></div>', unsafe_allow_html=True)
 
 with col2:
-    st.markdown('<h1 style="font-size: 3.5rem; margin-bottom: 0;">Parag Patle</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="text-gradient" style="font-size: 3.5rem; margin-bottom: 0;">Parag Patle</h1>', unsafe_allow_html=True)
     st.markdown('<h3 style="color: #00CC96; margin-top: 0;">Physical AI Engineer — SDE & ML</h3>', unsafe_allow_html=True)
     
     st.markdown("---")
@@ -101,6 +119,9 @@ with col2:
         </a>
         <a href="https://github.com/Paragiscool" target="_blank" style="text-decoration:none;">
             <button style="background-color: #24292e; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">GitHub</button>
+        </a>
+        <a href="https://codeforces.com/profile/paragpatle" target="_blank" style="text-decoration:none;">
+             <button style="background-color: #F39C12; color: #0e1117; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;">Codeforces</button>
         </a>
         <a href="mailto:email@example.com" style="text-decoration:none;">
             <button style="background-color: #D44638; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Email</button>

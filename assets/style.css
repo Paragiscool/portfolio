@@ -8,47 +8,37 @@ body {
     color: #FAFAFA;
 }
 
-h1,
-h2,
-h3 {
+h1, h2, h3 {
     letter-spacing: -0.5px;
 }
 
-p {
-    line-height: 1.6;
-    font-size: 1.05rem;
-    color: #Cdd6f4;
+/* Gradient Text Class */
+.text-gradient {
+    background: linear-gradient(to right, #00C9FF, #92FE9D);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 /* Hide Streamlit components */
-#MainMenu {
-    visibility: hidden;
-}
+#MainMenu { visibility: hidden; }
+footer { visibility: hidden; }
+header { visibility: hidden; }
 
-footer {
-    visibility: hidden;
-}
-
-header {
-    visibility: hidden;
-}
-
-/* Custom Metrics Styling - Premium Dashboard Look */
+/* --- GLASSMORPHISM UI --- */
 div[data-testid="metric-container"] {
-    background-color: #1e1e24;
-    /* Slightly darker */
-    border: 1px solid #2d2d3a;
+    background: rgba(255, 255, 255, 0.05); /* Glass Background */
+    backdrop-filter: blur(10px);           /* Blur Effect */
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     padding: 20px;
     border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2sease, box-shadow 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Hover Effect for Cards */
 div[data-testid="metric-container"]:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 15px rgba(0, 204, 150, 0.15);
-    /* Tech Green Glow */
+    box-shadow: 0 8px 15px rgba(0, 204, 150, 0.15); /* Green Glow */
     border-color: #00CC96;
 }
 
@@ -68,13 +58,16 @@ img {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* Sidebar Lottie Container */
-.lottie-container {
-    margin-bottom: 20px;
+/* Button Animations */
+button {
+    transition: transform 0.2s ease !important;
 }
 
-/* Button Styling Override */
-.stButton button {
-    border-radius: 8px;
-    font-weight: 600;
+button:hover {
+    transform: translateY(-2px) !important;
+}
+
+/* Sidebar Styling */
+section[data-testid="stSidebar"] {
+    background-color: #11141d;
 }

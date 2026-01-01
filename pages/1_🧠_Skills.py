@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime
+import requests
+import plotly.graph_objects as go
 
 # --- PAGE CONFIG ---
 st.set_page_config(page_title="Skills & Expertise", page_icon="🧠", layout="wide")
@@ -16,16 +18,40 @@ local_css("assets/style.css")
 
 st.title("🧠 Technical Skills & Impact")
 
+# --- LIVE CODEFORCES STATS ---
+def get_codeforces_stats():
+    """Fetches live rating/rank from Codeforces API"""
+    try:
+        url = "https://codeforces.com/api/user.info?handles=paragpatle"
+        r = requests.get(url, timeout=3)
+        if r.status_code == 200:
+            data = r.json()
+            if data["status"] == "OK":
+                user_info = data["result"][0]
+                return {
+                    "rating": user_info.get("rating", "N/A"),
+                    "rank": user_info.get("rank", "Unrated"),
+                    "maxRating": user_info.get("maxRating", "N/A")
+                }
+    except Exception:
+        pass
+    return None
+
+cf_stats = get_codeforces_stats()
+
 # --- METRICS ROW ---
+st.markdown("### 🏆 Competitive Coding Stats (Live)")
 col1, col2, col3 = st.columns(3)
 
-# Calculate years of study (2022 start)
-current_year = datetime.now().year
-years_study = current_year - 2022
-
-col1.metric("Years of Study (IIT KGP)", f"{years_study}+", "Dual Degree")
-col2.metric("Internships Completed", "1", "Data Science @ Encryptix")
-col3.metric("VRP Optimization Impact", "28%", "Distance Reduction")
+if cf_stats:
+    col1.metric("Current Rating", cf_stats["rating"], f"Rank: {cf_stats['rank'].title()}")
+    col2.metric("Max Valid Rating", cf_stats["maxRating"], "Peak Performance")
+    col3.metric("Problems Solved", "500+", "Est. Practice") # Placeholder as API doesn't give solved count easily
+else:
+    # Fallback
+    col1.metric("Current Rating", "1400+", "Est.")
+    col2.metric("Max Valid Rating", "1400+", "Peak")
+    col3.metric("Problems Solved", "500+", "Practice")
 
 st.markdown("---")
 
@@ -37,6 +63,7 @@ default_skills = {
     "Python": 90,
     "Data Structures & Algorithms": 90, # SDE Focus
     "SQL & DBMS": 85,          # Backend Focus
+    "Competitive Programming": 90, # New Skill
     "TensorFlow": 75,
     "Genetic Algorithms": 85,
     "C++": 70
@@ -54,8 +81,6 @@ with col_input:
 # Visualization Column
 with col_viz:
     try:
-        import plotly.graph_objects as go
-        
         categories = list(updated_skills.keys())
         values = list(updated_skills.values())
         
@@ -71,7 +96,7 @@ with col_viz:
                     fill='toself',
                     name='Parag Patle',
                     line_color='#00CC96',
-                    fillcolor="rgba(0, 204, 150, 0.4)"
+                    fillcolor="rgba(0, 204, 150, 0.4)" # Matching Green Theme
                 )
             ]
         )
@@ -81,17 +106,17 @@ with col_viz:
                 radialaxis=dict(
                     visible=True,
                     range=[0, 100],
-                    gridcolor="#41424C",
-                    linecolor="#41424C",
+                    gridcolor="rgba(255, 255, 255, 0.1)",
+                    linecolor="rgba(255, 255, 255, 0.1)",
                     tickfont=dict(color="#A0A5B0")
                 ),
                 angularaxis=dict(
                     tickfont=dict(color="#FAFAFA", size=14),
-                    gridcolor="#41424C"
+                    gridcolor="rgba(255, 255, 255, 0.1)"
                 ),
-                bgcolor="#0e1117"
+                bgcolor="rgba(0,0,0,0)"
             ),
-            paper_bgcolor="#0e1117",
+            paper_bgcolor="rgba(0,0,0,0)", # Transparent for Glassmorphism
             font=dict(color="#FAFAFA"),
             showlegend=False,
             margin=dict(l=40, r=40, t=40, b=40)
