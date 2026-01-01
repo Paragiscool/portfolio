@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
-from datetime import datetime
-import requests
+# Import the function from your new utils file
+from utils import fetch_codeforces_stats
 import plotly.graph_objects as go
 
 # --- PAGE CONFIG ---
@@ -19,39 +19,21 @@ local_css("assets/style.css")
 st.title("🧠 Technical Skills & Impact")
 
 # --- LIVE CODEFORCES STATS ---
-def get_codeforces_stats():
-    """Fetches live rating/rank from Codeforces API"""
-    try:
-        url = "https://codeforces.com/api/user.info?handles=paragpatle"
-        r = requests.get(url, timeout=3)
-        if r.status_code == 200:
-            data = r.json()
-            if data["status"] == "OK":
-                user_info = data["result"][0]
-                return {
-                    "rating": user_info.get("rating", "N/A"),
-                    "rank": user_info.get("rank", "Unrated"),
-                    "maxRating": user_info.get("maxRating", "N/A")
-                }
-    except Exception:
-        pass
-    return None
+st.markdown("## ⚡ Live Competitive Stats")
 
-cf_stats = get_codeforces_stats()
+# Fetch data using the Cached function
+stats = fetch_codeforces_stats("paragpatle")
 
-# --- METRICS ROW ---
-st.markdown("### 🏆 Competitive Coding Stats (Live)")
-col1, col2, col3 = st.columns(3)
-
-if cf_stats:
-    col1.metric("Current Rating", cf_stats["rating"], f"Rank: {cf_stats['rank'].title()}")
-    col2.metric("Max Valid Rating", cf_stats["maxRating"], "Peak Performance")
-    col3.metric("Problems Solved", "500+", "Est. Practice") # Placeholder as API doesn't give solved count easily
+if stats:
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.metric("Current Rating", stats['rating'])
+    with col2:
+        st.metric("Rank", stats['rank'].title())
+    with col3:
+        st.metric("Max Rating", stats['max_rating'])
 else:
-    # Fallback
-    col1.metric("Current Rating", "1400+", "Est.")
-    col2.metric("Max Valid Rating", "1400+", "Peak")
-    col3.metric("Problems Solved", "500+", "Practice")
+    st.warning("Could not fetch live Codeforces data.")
 
 st.markdown("---")
 

@@ -1,73 +1,77 @@
 /* assets/style.css */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400&display=swap');
 
-/* Global Styles */
-body {
-    font-family: 'Inter', sans-serif;
-    background-color: #0e1117;
-    color: #FAFAFA;
+/* --- GLOBAL ANIMATED BACKGROUND --- */
+/* This creates a deep, moving gradient to make the app feel "alive" */
+.stApp {
+    background: linear-gradient(315deg, #0f0c29 3%, #302b63 38%, #24243e 68%, #0f0c29 98%);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
 }
 
-h1, h2, h3 {
-    letter-spacing: -0.5px;
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
-/* Gradient Text Class */
-.text-gradient {
-    background: linear-gradient(to right, #00C9FF, #92FE9D);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-/* Hide Streamlit components */
-#MainMenu { visibility: hidden; }
-footer { visibility: hidden; }
-header { visibility: hidden; }
-
-/* --- GLASSMORPHISM UI --- */
-div[data-testid="metric-container"] {
-    background: rgba(255, 255, 255, 0.05); /* Glass Background */
-    backdrop-filter: blur(10px);           /* Blur Effect */
+/* --- GLASSMORPHISM CARDS --- */
+/* Target Streamlit metrics and custom divs */
+div[data-testid="metric-container"],
+.glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    /* 5% White Transparency */
+    backdrop-filter: blur(10px);
+    /* The Frost Effect */
     -webkit-backdrop-filter: blur(10px);
+    /* Safari Support */
+    border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 20px;
-    border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-div[data-testid="metric-container"]:hover {
+/* Hover Effect: 3D Lift */
+div[data-testid="metric-container"]:hover,
+.glass-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 15px rgba(0, 204, 150, 0.15); /* Green Glow */
-    border-color: #00CC96;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-div[data-testid="metric-container"] label {
-    color: #A0A5B0;
-    font-weight: 500;
+/* --- TYPOGRAPHY --- */
+h1,
+h2,
+h3 {
+    font-family: 'Inter', sans-serif;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    /* Improves readability on gradients */
 }
 
-div[data-testid="metric-container"] div[data-testid="stMetricValue"] {
-    color: #FAFAFA;
-    font-weight: 700;
+/* Code Snippets (Monospace) */
+code {
+    font-family: 'JetBrains Mono', monospace;
+    color: #00e5ff;
+    /* Cyan for code */
 }
 
-/* Profile Image Styling */
-img {
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+/* --- CUSTOM SCROLLBAR --- */
+::-webkit-scrollbar {
+    width: 8px;
+    background: rgba(0, 0, 0, 0.2);
 }
 
-/* Button Animations */
-button {
-    transition: transform 0.2s ease !important;
-}
-
-button:hover {
-    transform: translateY(-2px) !important;
-}
-
-/* Sidebar Styling */
-section[data-testid="stSidebar"] {
-    background-color: #11141d;
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
 }
