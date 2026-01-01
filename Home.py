@@ -1,5 +1,6 @@
 import streamlit as st
 import os
+from utils import set_theme
 
 # --- PAGE CONFIG ---
 st.set_page_config(
@@ -7,6 +8,9 @@ st.set_page_config(
     page_icon="🌊",
     layout="wide",
 )
+
+# --- APPLY THEME ---
+set_theme()
 
 # --- ASSETS & STYLES ---
 def local_css(file_name):

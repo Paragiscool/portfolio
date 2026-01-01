@@ -1,77 +1,98 @@
 /* assets/style.css */
-/* Import Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400&family=Courier+Prime&display=swap');
 
-/* --- GLOBAL ANIMATED BACKGROUND --- */
-/* This creates a deep, moving gradient to make the app feel "alive" */
+/* Default Theme Variables (Glass/Dark - Fallback if JS injection fails) */
+:root {
+    --bg-color: #0e1117;
+    --text-color: #FAFAFA;
+    --card-bg: rgba(255, 255, 255, 0.05);
+    --card-border: rgba(255, 255, 255, 0.1);
+    --primary-color: #00CC96;
+    --font-body: 'Inter', sans-serif;
+    --font-code: 'JetBrains Mono', monospace;
+}
+
+/* Apply Variables */
+body {
+    background-color: var(--bg-color) !important;
+    color: var(--text-color) !important;
+    font-family: var(--font-body) !important;
+}
+
 .stApp {
-    background: linear-gradient(315deg, #0f0c29 3%, #302b63 38%, #24243e 68%, #0f0c29 98%);
-    background-size: 400% 400%;
-    animation: gradient 15s ease infinite;
+    background: var(--bg-color);
+    /* Overridden by gradient in Glass theme */
 }
 
-@keyframes gradient {
-    0% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0% 50%;
-    }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--text-color) !important;
+    font-family: var(--font-body);
 }
 
-/* --- GLASSMORPHISM CARDS --- */
-/* Target Streamlit metrics and custom divs */
+/* Glass/Metric Cards */
 div[data-testid="metric-container"],
 .glass-card {
-    background: rgba(255, 255, 255, 0.05);
-    /* 5% White Transparency */
+    background: var(--card-bg) !important;
     backdrop-filter: blur(10px);
-    /* The Frost Effect */
     -webkit-backdrop-filter: blur(10px);
-    /* Safari Support */
+    border: 1px solid var(--card-border) !important;
     border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Hover Effect: 3D Lift */
 div[data-testid="metric-container"]:hover,
 .glass-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-color: var(--primary-color) !important;
 }
 
-/* --- TYPOGRAPHY --- */
-h1,
-h2,
-h3 {
-    font-family: 'Inter', sans-serif;
-    color: #ffffff;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-    /* Improves readability on gradients */
+/* Text Colors */
+.stMarkdown p,
+.stMarkdown li {
+    color: var(--text-color) !important;
 }
 
-/* Code Snippets (Monospace) */
 code {
-    font-family: 'JetBrains Mono', monospace;
-    color: #00e5ff;
-    /* Cyan for code */
+    font-family: var(--font-code) !important;
+    color: var(--primary-color) !important;
+    background: rgba(255, 255, 255, 0.1);
 }
 
-/* --- CUSTOM SCROLLBAR --- */
-::-webkit-scrollbar {
-    width: 8px;
-    background: rgba(0, 0, 0, 0.2);
+/* Sidebar */
+section[data-testid="stSidebar"] {
+    background-color: var(--bg-color);
+    border-right: 1px solid var(--card-border);
 }
 
-::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
+section[data-testid="stSidebar"] p,
+section[data-testid="stSidebar"] label {
+    color: var(--text-color) !important;
+}
+
+/* Input Fields */
+input,
+textarea {
+    background-color: var(--card-bg) !important;
+    color: var(--text-color) !important;
+    border: 1px solid var(--card-border) !important;
+}
+
+/* Buttons */
+button {
+    border: 1px solid var(--primary-color) !important;
+    color: var(--text-color) !important;
+}
+
+/* Gradient Text Class (Optional usage) */
+.text-gradient {
+    background: linear-gradient(to right, #00C9FF, #92FE9D);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }

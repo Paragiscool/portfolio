@@ -9,3 +9,9 @@ numpy
 scikit-learn
 altair
 requests
+langchain
+langchain-openai
+langchain-community
+faiss-cpu
+pypdf
+tiktoken
