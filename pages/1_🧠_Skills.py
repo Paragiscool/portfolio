@@ -1,11 +1,14 @@
 import streamlit as st
 import pandas as pd
 # Import the function from your new utils file
-from utils import fetch_codeforces_stats
+from utils import fetch_codeforces_stats, set_theme
 import plotly.graph_objects as go
 
 # --- PAGE CONFIG ---
 st.set_page_config(page_title="Skills & Expertise", page_icon="🧠", layout="wide")
+
+# --- APPLY THEME ---
+set_theme()
 
 def local_css(file_name):
     try:

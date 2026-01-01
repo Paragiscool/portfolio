@@ -1,8 +1,12 @@
 import streamlit as st
 import json
+from utils import set_theme
 
 # --- PAGE CONFIG ---
 st.set_page_config(page_title="Career Timeline", page_icon="🎓", layout="wide")
+
+# --- APPLY THEME ---
+set_theme()
 
 def local_css(file_name):
     try:
