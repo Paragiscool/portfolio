@@ -1,86 +1,72 @@
 import streamlit as st
-import os
-from utils import set_theme
-from langchain_community.document_loaders import PyPDFLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_openai import OpenAIEmbeddings, ChatOpenAI
-from langchain_community.vectorstores import FAISS
-from langchain.chains import RetrievalQA
-from langchain.schema import HumanMessage, AIMessage
+import utils
+import time
 
-# --- APPLY THEME ---
-set_theme()
+# Page Config
+st.set_page_config(page_title="Chat with Resume", page_icon="💬", layout="wide")
 
-st.title("💬 Chat with My Resume")
-st.markdown("""
-<div class="glass-card" style="padding: 15px; margin-bottom: 20px;">
-    🤖 <b>AI Recruiter Assistant</b><br>
-    Ask questions about my experience, skills, or projects. The AI answers strictly based on my attached resume.
-</div>
-""", unsafe_allow_html=True)
+# 1. Apply Layout & Theme
+utils.render_page_layout()
 
-# --- SIDEBAR: API KEY ---
-with st.sidebar:
-    st.divider()
-    api_key = st.text_input("OpenAI API Key", type="password", help="Enter your key to chat.")
-    if not api_key:
-        st.warning("Please enter an OpenAI API Key to proceed.")
-        st.stop()
-    os.environ["OPENAI_API_KEY"] = api_key
+st.title("💬 Chat with Parag's Resume")
+st.markdown("Ask questions about my Experience, Skills, or Projects directly to this AI assistant.")
 
-# --- RAG PIPELINE ---
-@st.cache_resource
-def initialize_vector_store():
-    """Ingests resume pdf and creates FAISS index."""
-    resume_path = "assets/resume.pdf"
+# 2. API Key Handling
+api_key = None
+
+# Check Secrets first
+try:
+    if "openai" in st.secrets:
+        api_key = st.secrets["openai"]["api_key"]
+except Exception:
+    pass
+
+# Fallback to Sidebar Input
+if not api_key:
+    with st.sidebar:
+        st.divider()
+        api_key = st.text_input("🔑 OpenAI API Key", type="password", help="Enter your key to chat.")
+        if not api_key:
+            st.warning("Please enter an API Key to activate the chat.")
+
+# 3. Chat Interface
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+# Display History
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
+
+# Handle User Input
+if prompt := st.chat_input("Ask me anything... (e.g., 'What is his GPA?')"):
+    # Add User Message to History
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    with st.chat_message("user"):
+        st.markdown(prompt)
+
+    # Generate Response
+    with st.chat_message("assistant"):
+        message_placeholder = st.empty()
+        message_placeholder.markdown("Thinking...")
+        
+        # Build & Run Chain
+        chain = utils.build_rag_chain(api_key)
+        
+        # Check if chain is a Stub (Fallback)
+        if isinstance(chain, utils.StubChain):
+            response = chain.run(prompt)
+            # Add a small delay for realism if it's a stub
+            time.sleep(0.5)
+        else:
+            try:
+                # Run the actual RAG chain
+                res = chain.invoke(prompt)
+                response = res['result']
+            except Exception as e:
+                response = f"❌ Error: {str(e)}"
+
+        message_placeholder.markdown(response)
     
-    if not os.path.exists(resume_path):
-        st.error("Resume file not found in assets/resume.pdf")
-        return None
-
-    # 1. Load PDF
-    loader = PyPDFLoader(resume_path)
-    docs = loader.load()
-
-    # 2. Split Text
-    splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
-    chunks = splitter.split_documents(docs)
-
-    # 3. Create Embeddings & Vector Store
-    embeddings = OpenAIEmbeddings()
-    vector_store = FAISS.from_documents(chunks, embeddings)
-    
-    return vector_store
-
-# Initialize QA Chain
-if api_key:
-    vector_store = initialize_vector_store()
-    
-    if vector_store:
-        llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0)
-        qa_chain = RetrievalQA.from_chain_type(
-            llm=llm,
-            chain_type="stuff",
-            retriever=vector_store.as_retriever(),
-            return_source_documents=True
-        )
-
-        # --- CHAT INTERFACE ---
-        if "messages" not in st.session_state:
-            st.session_state.messages = [{"role": "assistant", "content": "Hello! I've read Parag's resume. Ask me anything!"}]
-
-        # Display History
-        for msg in st.session_state.messages:
-            st.chat_message(msg["role"]).write(msg["content"])
-
-        # User Input
-        if prompt := st.chat_input("Ex: What databases does Parag know?"):
-            st.session_state.messages.append({"role": "user", "content": prompt})
-            st.chat_message("user").write(prompt)
-
-            with st.chat_message("assistant"):
-                with st.spinner("Thinking..."):
-                    response = qa_chain.invoke({"query": prompt})
-                    answer = response["result"]
-                    st.write(answer)
-                    st.session_state.messages.append({"role": "assistant", "content": answer})
+    # Add Assistant Message to History
+    st.session_state.messages.append({"role": "assistant", "content": response})
